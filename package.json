@@ -3,8 +3,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start",
-    "postinstall": "yarn build"
+    "start": "next start -p $PORT",
+    "heroku-postbuild": "yarn build"
   },
   "dependencies": {
     "axios": "^0.18.0",
