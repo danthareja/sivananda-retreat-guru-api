@@ -1,5 +1,5 @@
 {
-  "name": "create-next-example-app",
+  "name": "sivananda-retreat-guru-api",
   "scripts": {
     "dev": "next",
     "build": "next build",
