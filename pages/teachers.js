@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import dynamic from 'next/dynamic'
-import api from '../api';
+import { get } from '../api';
+
+import APIError from '../components/APIError.js'
 
 const JSONView = dynamic(import('react-json-view'), {
   ssr: false
@@ -8,16 +10,16 @@ const JSONView = dynamic(import('react-json-view'), {
 
 export default class Program extends Component {
   static async getInitialProps({ query }) {
-    const { data } = await api.get('/teachers', {
-      params: query
-    })
-    return { data }
+    return get('/teachers', query)
   }
 
   render() {
     return (
       <div>
-        <JSONView src={this.props.data} />
+        {this.props.error
+          ? <APIError error={this.props.error} />
+          : <JSONView src={this.props.data} />
+        }
       </div>
     )
   }
