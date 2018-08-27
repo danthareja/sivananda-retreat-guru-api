@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Error({ error }) {
+export default function APIError({ error }) {
   return (
     <div>
       <h1>API Error</h1>
