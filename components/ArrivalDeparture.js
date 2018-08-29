@@ -8,7 +8,11 @@ import 'react-table/react-table.css';
 
 export default class ArrivalDeparture extends Component {
   getColumns() {
-    return [{
+    const { query } = this.props;
+
+    const title = `Arrivals and Departures between ${query.min_stay} and ${query.max_stay}`
+    
+    const columns = [{
       Header: 'Day',
       accessor: 'day'
     }, {
@@ -33,6 +37,11 @@ export default class ArrivalDeparture extends Component {
       Header: 'Location',
       accessor: 'location',
     }]
+
+    return [{
+      Header: title,
+      columns
+    }];
   }
 
   getData() {

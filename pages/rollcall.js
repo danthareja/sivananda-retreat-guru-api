@@ -10,17 +10,39 @@ export default class RollcallPage extends Component {
   static DEFAULT_BLANK_COLUMNS = 6
 
   static async getInitialProps({ query }) {
+    // Check required parameters
+    if (!query.program_id) {
+      return {
+        error: {
+          ourMessage: 'Expected parameter "program_id" (e.g. /rollcall?program_id=6985)',
+          endpoint: '/rollcall',
+          params: query
+        }
+      }
+    }
+
     // Assign default query parameters
     query = Object.assign({
       blank_columns: RollcallPage.DEFAULT_BLANK_COLUMNS, 
     }, query)
 
-    const { error, data } = await get('/registrations', _.omit(query, ['blank_columns']))
+    // Query Retreat Guru
+    const [programs, registrations] = await Promise.all([
+      get('/programs', { id: query.program_id }),
+      get('/registrations', _.omit(query, ['blank_columns'])),
+    ]);
+
+    // Validate responses
+    if (programs.error || registrations.error) {
+      return {
+        error: programs.error || registrations.error 
+      }
+    }
 
     return {
       query,
-      error,
-      data
+      program: programs.data[0],
+      registrations: registrations.data,
     }
   }
 
@@ -29,7 +51,7 @@ export default class RollcallPage extends Component {
       <div>
         {this.props.error
           ? <APIError error={this.props.error} />
-          : <Rollcall registrations={this.props.data} query={this.props.query} />
+          : <Rollcall registrations={this.props.registrations} program={this.props.program} query={this.props.query} />
         }
       </div>
     )

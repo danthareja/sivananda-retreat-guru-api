@@ -7,12 +7,18 @@ import 'react-table/react-table.css';
 
 export default class Rollcall extends Component {
   getColumns() {
+    const { query, program } = this.props;
+
+    const title = program.start_date && program.end_date
+      ? `${program.name} from ${program.start_date} to ${program.end_date}`
+      : program.name
+    
     const columns = [{
       Header: 'Name',
       accessor: 'full_name'
     }]
 
-    _.times(this.props.query.blank_columns, n => {
+    _.times(query.blank_columns, n => {
       columns.push({
         id: `blankColumn${n}`,
         Header: '',
@@ -20,7 +26,11 @@ export default class Rollcall extends Component {
         sortable: false
       })
     })
-    return columns;
+
+    return [{
+      Header: title,
+      columns
+    }];
   }
 
   getData() {
