@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Home (){
+export default function IndexPage (){
   return (
     <div>
       <h1>README</h1>

@@ -4,9 +4,9 @@ import { get } from '../api';
 import moment from 'moment';
 
 import APIError from '../components/APIError.js'
-import ArrivalDepartureReport from '../components/ArrivalDepartureReport.js'
+import ArrivalDeparture from '../components/ArrivalDeparture.js'
 
-export default class ArrivalDeparture extends Component {
+export default class ArrivalDeparturePage extends Component {
   static PROGRAM_ID = 6985
 
   static async getInitialProps({ query }) {
@@ -31,7 +31,7 @@ export default class ArrivalDeparture extends Component {
       <div>
         {this.props.error
           ? <APIError error={this.props.error} />
-          : <ArrivalDepartureReport registrations={this.props.data} query={this.props.query} />
+          : <ArrivalDeparture registrations={this.props.data} query={this.props.query} />
         }
       </div>
     )
