@@ -3,7 +3,7 @@ import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 
 const api = axios.create({
-  baseURL: 'https://dev.sivanandabahamas.rbgapp.com/api/v1',
+  baseURL: publicRuntimeConfig.RETREAT_GURU_API_URL,
   params: {
     token: publicRuntimeConfig.RETREAT_GURU_API_TOKEN
   }
