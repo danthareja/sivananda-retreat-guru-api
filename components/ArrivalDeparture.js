@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
 import ReactTable from 'react-table';
-import ReactToPrint from 'react-to-print';
 import moment from 'moment';
 import _ from 'lodash';
 
 import 'react-table/react-table.css';
 
 export default class ArrivalDeparture extends Component {
-  getColumns() {
+  getTitle() {
     const { query } = this.props;
+    return `Special Guests: Arrivals and Departures between ${query.min_stay} and ${query.max_stay}` 
+  }
 
-    const title = `Special Guests: Arrivals and Departures between ${query.min_stay} and ${query.max_stay}`
-    
-    const columns = [{
+  getColumns() {
+    return [{
       Header: 'Day',
       accessor: 'day'
     }, {
@@ -37,11 +37,6 @@ export default class ArrivalDeparture extends Component {
       Header: 'Location',
       accessor: 'location',
     }]
-
-    return [{
-      Header: title,
-      columns
-    }];
   }
 
   getData() {
@@ -93,41 +88,107 @@ export default class ArrivalDeparture extends Component {
       .value()
   }
 
-  getTrProps(state, rowInfo, column, instance) {
-    const dayToColor = {
-      'Monday': '#fea3aa',
-      'Tuesday': '#f8b88b',
-      'Wednesday': '#faf884',
-      'Thursday': '#baed91',
-      'Friday': '#a2f2f0',
-      'Saturday': '#b2cefe',
-      'Sunday': '#f2a2e8'
-    }
-
-    return {
-      style: {
-        backgroundColor: dayToColor[rowInfo.row.day]
+  getColorForDay(day) {
+    const days = {
+      'Monday': {
+        hex: '#fea3aa',
+        rgb: [254,163,170]
+      },
+      'Tuesday': {
+        hex: '#f8b88b',
+        rgb: [248,184,139]
+      },
+      'Wednesday': {
+        hex: '#faf884',
+        rgb: [250,248,132]
+      },
+      'Thursday': {
+        hex: '#baed91',
+        rgb: [186,237,145]
+      },
+      'Friday': {
+        hex: '#a2f2f0',
+        rgb: [162,242,240]
+      },
+      'Saturday': {
+        hex: '#b2cefe',
+        rgb: [178,206,254]
+      },
+      'Sunday': {
+        hex: '#f2a2e8',
+        rgb: [242,162,232]
       }
     }
+    return days[day]
   }
 
+
+
+  download() {
+    const JSPDF = require('jspdf');
+    require('jspdf-autotable');
+
+    const title = this.getTitle();
+    const data = this.reactTable.getResolvedState().sortedData;
+    const columns = this.getColumns().map(col => ({
+      title: col.Header,
+      dataKey: col.accessor
+    }));
+
+    const totalPagesExp = '{total_pages_count_string}'
+
+    const pageContent = function (data) {
+      // HEADER
+      doc.setFontSize(14);
+      doc.setFontStyle('normal');
+      doc.text(title, data.settings.margin.left, 22);
+
+      // FOOTER
+      var str = `Page ${data.pageCount} of ${totalPagesExp}`;
+      doc.setFontSize(10);
+      var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
+      doc.text(str, data.settings.margin.left, pageHeight - 10);
+    };
+
+    const doc = new JSPDF('landscape');
+
+    doc.autoTable(columns, data, {
+      theme: 'grid',
+      addPageContent: pageContent,
+      margin: { top: 30 },
+      createdCell: (cell, data) => {
+        cell.styles.fillColor = this.getColorForDay(data.row.raw.day).rgb
+      }
+    })
+
+    doc.putTotalPages(totalPagesExp);
+
+    doc.save(`${_.snakeCase(title)}.pdf`)
+  }
+
+
   render() {
-    const data = this.getData();
+    const title = this.getTitle();
     const columns = this.getColumns();
+    const data = this.getData();
 
     return (
       <div>
-        <ReactToPrint
-          trigger={() => <button>Print report</button>}
-          content={() => this.componentRef}
-        />
+        <button onClick={() => this.download()}>Download Report</button>
         <ReactTable
-          ref={el => (this.componentRef = el)}
+          ref={el => (this.reactTable = el)}
           data={data}
-          columns={columns}
+          columns={[{
+            Header: title,
+            columns
+          }]}
           showPagination={false}
           defaultPageSize={data.length}
-          getTrProps={this.getTrProps}
+          getTrProps={(state, rowInfo, column, instance) => ({
+            style: {
+              backgroundColor: this.getColorForDay(rowInfo.row.day).hex
+            }
+          })}
         />
       </div>
     )
