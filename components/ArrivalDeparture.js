@@ -10,7 +10,7 @@ export default class ArrivalDeparture extends Component {
   getColumns() {
     const { query } = this.props;
 
-    const title = `Arrivals and Departures between ${query.min_stay} and ${query.max_stay}`
+    const title = `Special Guests: Arrivals and Departures between ${query.min_stay} and ${query.max_stay}`
     
     const columns = [{
       Header: 'Day',
