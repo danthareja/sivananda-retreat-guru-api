@@ -8,7 +8,7 @@ const JSONView = dynamic(import('react-json-view'), {
   ssr: false
 })
 
-export default class Program extends Component {
+export default class Teachers extends Component {
   static async getInitialProps({ query }) {
     return get('/teachers', query)
   }

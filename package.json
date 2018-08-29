@@ -7,11 +7,16 @@
     "heroku-postbuild": "yarn build"
   },
   "dependencies": {
+    "@zeit/next-css": "^0.2.0",
     "axios": "^0.18.0",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.2",
     "next": "^6.1.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-json-view": "^1.19.1"
+    "react-json-view": "^1.19.1",
+    "react-table": "^6.8.6",
+    "react-to-print": "^2.0.0-alpha-2"
   },
   "devDependencies": {
     "dotenv": "^6.0.0"
