@@ -174,14 +174,14 @@ export default class ArrivalDeparture extends Component {
 
     return (
       <div>
-        <button onClick={() => this.download()}>Download Report</button>
+        <header>
+          <h1>{title}</h1>
+          <button onClick={() => this.download()}>Download Report</button>
+        </header>
         <ReactTable
           ref={el => (this.reactTable = el)}
           data={data}
-          columns={[{
-            Header: title,
-            columns
-          }]}
+          columns={columns}
           showPagination={false}
           defaultPageSize={data.length}
           getTrProps={(state, rowInfo, column, instance) => ({
@@ -190,6 +190,21 @@ export default class ArrivalDeparture extends Component {
             }
           })}
         />
+        <style jsx>{`
+          header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+          }
+          header h1 {
+            font-size: 18px;
+            display: block;
+          }
+          header button {
+            display: block;
+            font-size: 14px;
+          }
+        `}</style>
       </div>
     )
   }
