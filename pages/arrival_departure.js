@@ -12,7 +12,7 @@ export default class ArrivalDeparturePage extends Component {
   static async getInitialProps({ query }) {
     // Assign default query parameters
     query = Object.assign({
-      program_id: ArrivalDeparture.PROGRAM_ID, 
+      program_id: ArrivalDeparturePage.PROGRAM_ID,
       min_stay: moment().format('YYYY-MM-DD'),
       max_stay: moment().add(7, 'days').format('YYYY-MM-DD')
     }, query)

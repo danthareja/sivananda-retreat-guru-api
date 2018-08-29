@@ -6,7 +6,7 @@ import _ from 'lodash';
 
 import 'react-table/react-table.css';
 
-export default class ArrivalDepartureReport extends Component {
+export default class ArrivalDeparture extends Component {
   getColumns() {
     return [{
       Header: 'Day',
