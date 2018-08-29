@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import dynamic from 'next/dynamic'
-import { get } from '../api';
+import { getAll } from '../api';
 import moment from 'moment';
 
 import APIError from '../components/APIError.js'
@@ -17,7 +17,7 @@ export default class ArrivalDeparturePage extends Component {
       max_stay: moment().add(7, 'days').format('YYYY-MM-DD')
     }, query)
 
-    const { error, data } = await get('/registrations', query)
+    const { error, data } = await getAll('/registrations', query)
 
     return {
       query,

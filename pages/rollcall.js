@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import dynamic from 'next/dynamic'
-import { get } from '../api';
+import { get, getAll } from '../api';
 import _ from 'lodash';
 
 import APIError from '../components/APIError.js'
@@ -33,10 +33,9 @@ export default class RollcallPage extends Component {
     ]);
 
     // Validate responses
-    if (programs.error || registrations.error) {
-      return {
-        error: programs.error || registrations.error 
-      }
+    const error = programs.error || registrations.error
+    if (error) {
+      return { error }
     }
 
     return {

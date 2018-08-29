@@ -46,3 +46,7 @@ export async function get(endpoint, params) {
 
   return { data, error }
 };
+
+export async function getAll(endpoint, params) {
+  return get(endpoint, Object.assign({}, params, { limit: 0 }))
+}
