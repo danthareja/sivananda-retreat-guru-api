@@ -64,9 +64,9 @@ export default class ArrivalDeparture extends Component {
             name: r.full_name,
             room: r.room,
             date: date.ISOString,
-            flightTime: r.flight_arrival_time_in_nassau_2,
-            flightNumber: r.flight_airline_and_flight_number,
-            location: r.arriving_by_boat_or_at_the_back_gate,
+            flightTime: r.questions.flight_arrival_time_in_nassau_2,
+            flightNumber: r.questions.flight_airline_and_flight_number,
+            location: r.questions.arriving_by_boat_or_at_the_back_gate,
           }))
         
         const departures = registrations
@@ -77,9 +77,9 @@ export default class ArrivalDeparture extends Component {
             name: r.full_name,
             room: r.room,
             date: date.ISOString,
-            flightTime: r.flight_departure_time_from_nassau,
-            flightNumber: r.flight_airline_and_flight_number_for_nassau_departure,
-            location: r.arriving_by_boat_or_at_the_back_gate,
+            flightTime: r.questions.flight_departure_time_from_nassau,
+            flightNumber: r.questions.flight_airline_and_flight_number_for_nassau_departure,
+            location: r.questions.arriving_by_boat_or_at_the_back_gate,
           }))
 
         return arrivals.concat(departures)
