@@ -2,13 +2,16 @@ import React, { Component } from 'react'
 import ReactTable from 'react-table';
 import moment from 'moment';
 import _ from 'lodash';
+import round from '../utils/round.js'
 
 import 'react-table/react-table.css';
 
 export default class ArrivalDeparture extends Component {
   getTitle() {
-    const { query } = this.props;
+    const { query, program } = this.props;
     return `Special Guests: Arrivals and Departures between ${query.min_stay} and ${query.max_stay}` 
+    // To display dyanmic program name instead, use the following line:
+    // return `${program.name}: Arrivals and Departures between ${query.min_stay} and ${query.max_stay}` 
   }
 
   getColumns() {
@@ -36,8 +39,38 @@ export default class ArrivalDeparture extends Component {
     }, {
       Header: 'Location',
       accessor: 'location',
+    }, {
+      Header: 'Taxi Pickup',
+      accessor: 'taxiPickup',
     }]
   }
+
+
+  // 30 minutes after landing time (for arrivals)
+  // 3 hours before the takeoff time (for departures)
+  // Always rounding down by 15-minute accuracy
+  getTaxiPickupTime(flightTime, direction) {
+    if (!flightTime) {
+      return;
+    }
+
+    const format = 'hh:mm a';
+    const taxiPickupTime = moment(flightTime, format);
+    if (!taxiPickupTime.isValid()) {
+      return 'Invalid time format';
+    }
+
+    if (direction === 'Arrival') {
+      taxiPickupTime.add(30, 'minutes');
+    } else if (direction === 'Departure') {
+      taxiPickupTime.subtract(3, 'hours');
+    } else {
+      throw new Error('Invalid direction. Expected either "Arrival" or "Departure"')
+    }
+
+    return round(taxiPickupTime, moment.duration(15, 'minutes'), 'floor').format(format);
+  }
+
 
   getData() {
     const { query, registrations } = this.props;
@@ -67,6 +100,7 @@ export default class ArrivalDeparture extends Component {
             flightTime: r.questions.flight_arrival_time_in_nassau_2,
             flightNumber: r.questions.flight_airline_and_flight_number,
             location: r.questions.arriving_by_boat_or_at_the_back_gate,
+            taxiPickup: this.getTaxiPickupTime(r.questions.flight_arrival_time_in_nassau_2, 'Arrival')
           }))
         
         const departures = registrations
@@ -80,6 +114,7 @@ export default class ArrivalDeparture extends Component {
             flightTime: r.questions.flight_departure_time_from_nassau,
             flightNumber: r.questions.flight_airline_and_flight_number_for_nassau_departure,
             location: r.questions.arriving_by_boat_or_at_the_back_gate,
+            taxiPickup: this.getTaxiPickupTime(r.questions.flight_departure_time_from_nassau, 'Departure')
           }))
 
         return arrivals.concat(departures)
@@ -122,8 +157,6 @@ export default class ArrivalDeparture extends Component {
     return days[day]
   }
 
-
-
   download() {
     const JSPDF = require('jspdf');
     require('jspdf-autotable');
@@ -151,7 +184,6 @@ export default class ArrivalDeparture extends Component {
     };
 
     const doc = new JSPDF('landscape');
-
     doc.autoTable(columns, data, {
       theme: 'grid',
       addPageContent: pageContent,
@@ -160,9 +192,7 @@ export default class ArrivalDeparture extends Component {
         cell.styles.fillColor = this.getColorForDay(data.row.raw.day).rgb
       }
     })
-
     doc.putTotalPages(totalPagesExp);
-
     doc.save(`${_.snakeCase(title)}.pdf`)
   }
 

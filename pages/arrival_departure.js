@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import dynamic from 'next/dynamic'
-import { getAll } from '../api';
 import moment from 'moment';
+import { get, getAll } from '../api';
 
 import APIError from '../components/APIError.js'
 import ArrivalDeparture from '../components/ArrivalDeparture.js'
@@ -17,21 +16,31 @@ export default class ArrivalDeparturePage extends Component {
       max_stay: moment().add(7, 'days').format('YYYY-MM-DD')
     }, query)
 
-    const { error, data } = await getAll('/registrations', query)
+    const [programs, registrations] = await Promise.all([
+      get('/programs', { id: query.program_id }),
+      getAll('/registrations', query),
+    ]);
+
+    // Validate responses
+    const error = programs.error || registrations.error
+    if (error) {
+      return { error }
+    }
 
     return {
       query,
-      error,
-      data
+      program: programs.data[0],
+      registrations: registrations.data,
     }
   }
 
   render() {
+    const { error, program, registrations, query } = this.props;
     return (
       <div>
-        {this.props.error
-          ? <APIError error={this.props.error} />
-          : <ArrivalDeparture registrations={this.props.data} query={this.props.query} />
+        {error
+          ? <APIError error={error} />
+          : <ArrivalDeparture program={program} registrations={registrations} query={query} />
         }
       </div>
     )
