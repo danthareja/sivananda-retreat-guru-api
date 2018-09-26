@@ -18,7 +18,11 @@ export default class ArrivalDeparturePage extends Component {
     // Query Retreat Guru
     const [programs, registrations] = await Promise.all([
       get('/programs', { id: query.program_id }),
-      getAll('/registrations', query),
+      getAll('/registrations', {
+        program_id: query.program_id,
+        min_stay: query.min_stay,
+        max_stay: query.max_stay
+      }),
     ]);
 
     // Validate responses

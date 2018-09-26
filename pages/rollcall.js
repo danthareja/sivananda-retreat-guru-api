@@ -26,7 +26,9 @@ export default class RollcallPage extends Component {
     // Query Retreat Guru
     const [programs, registrations] = await Promise.all([
       get('/programs', { id: query.program_id }),
-      getAll('/registrations', omit(query, ['blank_columns'])),
+      getAll('/registrations', {
+        program_id: query.program_id
+      }),
     ]);
 
     // Validate responses

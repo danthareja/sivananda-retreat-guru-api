@@ -39,17 +39,18 @@ export default function IndexPage (){
           <p>This is customizeable by adding the <i>min_stay</i> and <i>max_stay</i> <strong>parameters</strong>.</p>
           <p>For example, to generate a report for registrations between <strong>2018-08-28</strong> and <strong>2018-09-09</strong>, use the following url</p>
           <p><a href="/arrival_departure?min_stay=2018-08-28&max_stay=2018-09-09">/arrival_departure?min_stay=2018-08-28&max_stay=2018-09-09</a></p>
+          <p>This is also customizeable by adding the <i>program_id</i> <strong>paramater</strong>. By default, the <i>program_id</i> is set to <strong>5239</strong></p>
         </div>
         <div>
           <h3>Rollcall</h3>
           <p>A rollcall report is available at <a href="/rollcall">/rollcall</a></p>
           <p>For this report to work, you must at least include the <i>program_id</i> <strong>parameter</strong></p>
-          <p>For example, to generate a report for <strong>program 5239</strong>, use the following url</p>
-          <p><a href="/rollcall?program_id=5239">/rollcall?program_id=5239</a></p>
+          <p>For example, to generate a report for <strong>program 3524</strong>, use the following url</p>
+          <p><a href="/rollcall?program_id=3524">/rollcall?program_id=3524</a></p>
           <p>By default, this report includes <strong>6 blank columns</strong></p>
           <p>This is customizeable by adding the <i>blank_columns</i> <strong>parameter</strong></p>
-          <p>For example, to generate a report for <strong>program 5239</strong> with <strong>3 blank columns</strong>, use the following url</p>
-          <p><a href="/rollcall?program_id=5239&blank_columns=3">/rollcall?program_id=5239&blank_columns=3</a></p>
+          <p>For example, to generate a report for <strong>program 3524</strong> with <strong>3 blank columns</strong>, use the following url</p>
+          <p><a href="/rollcall?program_id=3524&blank_columns=3">/rollcall?program_id=3524&blank_columns=3</a></p>
         </div>
       </section>
     </div>
