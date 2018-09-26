@@ -6,6 +6,7 @@ import APIError from '../components/APIError.js'
 
 const JSONView = dynamic(import('react-json-view'), {
   ssr: false
+  
 })
 
 export default class RegistrationsPage extends Component {

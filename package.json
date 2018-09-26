@@ -1,14 +1,17 @@
 {
   "name": "sivananda-retreat-guru-api",
+  "license": "UNLICENSED",
   "scripts": {
-    "dev": "next",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "next start -p $PORT",
+    "start": "NODE_ENV=production node server.js",
     "heroku-postbuild": "yarn build"
   },
   "dependencies": {
     "@zeit/next-css": "^0.2.0",
     "axios": "^0.18.0",
+    "express": "^4.16.3",
+    "express-basic-auth": "^1.1.5",
     "http-status": "^1.2.0",
     "jspdf": "^1.4.1",
     "jspdf-autotable": "^2.3.5",
