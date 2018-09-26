@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import dynamic from 'next/dynamic';
 import ReactTable from 'react-table';
-import _ from 'lodash';
+import { times, snakeCase, trim } from 'lodash';
 
 import 'react-table/react-table.css';
 
@@ -19,8 +18,8 @@ export default class Rollcall extends Component {
     const { query, program } = this.props;
 
     const title = program.start_date && program.end_date
-      ? `${program.name} from ${program.start_date} to ${program.end_date}`
-      : program.name
+      ? `${trim(program.name)} from ${program.start_date} to ${program.end_date}`
+      : trim(program.name)
     
     const columns = [{
       id: 'fullName',
@@ -28,7 +27,7 @@ export default class Rollcall extends Component {
       accessor: 'full_name'
     }]
 
-    _.times(query.blank_columns, n => {
+    times(query.blank_columns, n => {
       columns.push({
         id: `blankColumn${n}`,
         Header: '',
@@ -80,7 +79,7 @@ export default class Rollcall extends Component {
 
     doc.putTotalPages(totalPagesExp);
 
-    doc.save(`${_.snakeCase(title)}.pdf`)
+    doc.save(`${snakeCase(title)}.pdf`)
   }
 
   render() {

@@ -21,7 +21,7 @@ export async function get(endpoint, params) {
       error = {
         endpoint,
         params,
-        ourMessage: `Expect data type object but got ${typeof response.data}. This is likely an internal error on their side.`,
+        ourMessage: `Expect data type object but got ${typeof response.data}. This is likely an issue with Retreat Guru's API. Try again later, and if this error persists, report this message to Retreat Guru's support team.`,
         theirMessage: response.data
       }
     }
@@ -30,7 +30,7 @@ export async function get(endpoint, params) {
       error = {
         endpoint,
         params,
-        ourMessage: `Expected status code 200 but got ${e.response.status}. This is likely a fixable issue.`,
+        ourMessage: `Expected status code 200 but got ${e.response.status}. This is likely an issue on our side. Report this issue to Brahmaswaroop.`,
         theirMessage: e.response.data.error
       }
     } else {
@@ -38,7 +38,7 @@ export async function get(endpoint, params) {
       error = {
         endpoint,
         params,
-        ourMessage: `This is a catch-all error message for when something bad happens. Ask Brahmaswaroop to check the logs.`,
+        ourMessage: `This is a catch-all error message for when something very bad happens. Report this issue to Brahmaswaroop.`,
         theirMessage: e.message
       }
     }

@@ -1,9 +1,5 @@
 const withCSS = require('@zeit/next-css')
 
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
-}
-
 module.exports = withCSS({
   publicRuntimeConfig: {
     RETREAT_GURU_API_URL: process.env.RETREAT_GURU_API_URL,

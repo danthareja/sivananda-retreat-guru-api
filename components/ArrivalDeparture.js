@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ReactTable from 'react-table';
 import moment from 'moment';
-import _ from 'lodash';
+import { chain, snakeCase, trim } from 'lodash';
 import round from '../utils/round.js'
 
 import 'react-table/react-table.css';
@@ -9,9 +9,7 @@ import 'react-table/react-table.css';
 export default class ArrivalDeparture extends Component {
   getTitle() {
     const { query, program } = this.props;
-    return `Special Guests: Arrivals and Departures between ${query.min_stay} and ${query.max_stay}` 
-    // To display dyanmic program name instead, use the following line:
-    // return `${program.name}: Arrivals and Departures between ${query.min_stay} and ${query.max_stay}` 
+    return `${trim(program.name)}: Arrivals and Departures between ${query.min_stay} and ${query.max_stay}` 
   }
 
   getColumns() {
@@ -87,7 +85,7 @@ export default class ArrivalDeparture extends Component {
     }
 
     // Transform days into arrival/departure records
-    return _.chain(stayDateRange)
+    return chain(stayDateRange)
       .map(date => {
         const arrivals = registrations
           .filter(r => r.start_date === date.ISOString)
@@ -193,7 +191,7 @@ export default class ArrivalDeparture extends Component {
       }
     })
     doc.putTotalPages(totalPagesExp);
-    doc.save(`${_.snakeCase(title)}.pdf`)
+    doc.save(`${snakeCase(title)}.pdf`)
   }
 
 
