@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import dynamic from 'next/dynamic'
 import { get, getAll } from '../api';
 import { omit, assign } from 'lodash';
 
@@ -7,8 +6,6 @@ import ErrorPage from './_error.js'
 import Rollcall from '../components/Rollcall.js'
 
 export default class RollcallPage extends Component {
-  static BLANK_COLUMNS = 6
-
   static async getInitialProps(context) {
     // Check required parameters
     if (!context.query.program_id) {
@@ -23,7 +20,7 @@ export default class RollcallPage extends Component {
 
     // Assign default query parameters
     const query = assign({
-      blank_columns: RollcallPage.BLANK_COLUMNS, 
+      blank_columns: 6,
     }, context.query)
 
     // Query Retreat Guru
@@ -46,11 +43,12 @@ export default class RollcallPage extends Component {
   }
 
   render() {
+    const { error, program, registrations, query } = this.props;
     return (
       <div>
-        {this.props.error
-          ? <ErrorPage error={this.props.error} />
-          : <Rollcall registrations={this.props.registrations} program={this.props.program} query={this.props.query} />
+        {error
+          ? <ErrorPage error={error} />
+          : <Rollcall program={program} registrations={registrations} query={query} />
         }
       </div>
     )

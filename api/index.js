@@ -9,6 +9,8 @@ const api = axios.create({
   }
 });
 
+export const SPECIAL_GUEST_PROGRAM_ID = 5239;
+
 export async function get(endpoint, params) {
   let data = null;
   let error = null;
