@@ -25,6 +25,7 @@ export default class ArrivalDeparturePage extends Component {
       }),
     ]);
 
+
     // Validate responses
     const error = programs.error || registrations.error
     if (error) {
@@ -34,7 +35,7 @@ export default class ArrivalDeparturePage extends Component {
     return {
       query,
       program: programs.data[0],
-      registrations: registrations.data,
+      registrations: registrations.data.filter(registration => registration.status !== 'cancelled'),
     }
   }
 
