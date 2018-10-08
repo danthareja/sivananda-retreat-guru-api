@@ -6,6 +6,11 @@
     "start": "node server.js",
     "heroku-postbuild": "yarn build"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
     "axios": "^0.18.0",
@@ -22,6 +27,9 @@
     "react-table": "^6.8.6"
   },
   "devDependencies": {
-    "dotenv": "^6.0.0"
+    "dotenv": "^6.0.0",
+    "husky": "^1.1.1",
+    "prettier": "1.14.3",
+    "pretty-quick": "^1.7.0"
   }
 }

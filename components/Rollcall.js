@@ -1,40 +1,45 @@
-import React, { Component } from 'react'
-import ReactTable from 'react-table';
-import { times, snakeCase, trim } from 'lodash';
+import React, { Component } from "react";
+import ReactTable from "react-table";
+import { times, snakeCase, trim } from "lodash";
 
-import 'react-table/react-table.css';
+import "react-table/react-table.css";
 
 export default class Rollcall extends Component {
   getTitle() {
     const { program } = this.props;
-    let title = `Rollcall: ${program.name}`
+    let title = `Rollcall: ${program.name}`;
     if (program.start_date && program.end_date) {
-      title += ` from ${program.start_date} to ${program.end_date}`
+      title += ` from ${program.start_date} to ${program.end_date}`;
     }
-    return title
+    return title;
   }
 
   getColumns() {
     const { query, program } = this.props;
 
-    const title = program.start_date && program.end_date
-      ? `${trim(program.name)} from ${program.start_date} to ${program.end_date}`
-      : trim(program.name)
-    
-    const columns = [{
-      id: 'fullName',
-      Header: 'Name',
-      accessor: 'full_name'
-    }]
+    const title =
+      program.start_date && program.end_date
+        ? `${trim(program.name)} from ${program.start_date} to ${
+            program.end_date
+          }`
+        : trim(program.name);
+
+    const columns = [
+      {
+        id: "fullName",
+        Header: "Name",
+        accessor: "full_name"
+      }
+    ];
 
     times(query.blank_columns, n => {
       columns.push({
         id: `blankColumn${n}`,
-        Header: '',
-        accessor: () => '',
+        Header: "",
+        accessor: () => "",
         sortable: false
-      })
-    })
+      });
+    });
 
     return columns;
   }
@@ -44,8 +49,8 @@ export default class Rollcall extends Component {
   }
 
   download() {
-    const JSPDF = require('jspdf');
-    require('jspdf-autotable');
+    const JSPDF = require("jspdf");
+    require("jspdf-autotable");
 
     const title = this.getTitle();
     const data = this.reactTable.getResolvedState().sortedData;
@@ -54,32 +59,33 @@ export default class Rollcall extends Component {
       dataKey: col.id
     }));
 
-    const totalPagesExp = '{total_pages_count_string}'
+    const totalPagesExp = "{total_pages_count_string}";
 
-    const pageContent = function (data) {
+    const pageContent = function(data) {
       // HEADER
       doc.setFontSize(14);
-      doc.setFontStyle('normal');
+      doc.setFontStyle("normal");
       doc.text(title, data.settings.margin.left, 22);
 
       // FOOTER
       var str = `Page ${data.pageCount} of ${totalPagesExp}`;
       doc.setFontSize(10);
-      var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
+      var pageHeight =
+        doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
       doc.text(str, data.settings.margin.left, pageHeight - 10);
     };
 
-    const doc = new JSPDF('portrait');
+    const doc = new JSPDF("portrait");
 
     doc.autoTable(columns, data, {
-      theme: 'grid',
+      theme: "grid",
       addPageContent: pageContent,
       margin: { top: 30 }
-    })
+    });
 
     doc.putTotalPages(totalPagesExp);
 
-    doc.save(`${snakeCase(title)}.pdf`)
+    doc.save(`${snakeCase(title)}.pdf`);
   }
 
   render() {
@@ -117,7 +123,6 @@ export default class Rollcall extends Component {
           }
         `}</style>
       </div>
-    )
+    );
   }
 }
-
