@@ -5,12 +5,9 @@ import { defaults, pick } from 'lodash';
 
 import { getCourses, getRegistrations, getRegistrationsWithoutCourse, getAvailableCoursesForRegistration } from '../api';
 import ErrorPage from './_error.js'
+import CourseSuggestions from '../components/CourseSuggestions.js'
 
-const JSONView = dynamic(import('react-json-view'), {
-  ssr: false
-});
-
-export default class CourseSuggestions extends Component {
+export default class CourseSuggestionsPage extends Component {
   static async getInitialProps(context) {
     const query = defaults(pick(context.query, ['min_stay', 'max_stay']), {
       min_stay: moment().format('YYYY-MM-DD'),
@@ -32,10 +29,11 @@ export default class CourseSuggestions extends Component {
       registrations: getRegistrationsWithoutCourse(registrations.data)
         .map(registration => {
           return {
-            registration,
-            availableCourses: getAvailableCoursesForRegistration(courses.data, registration)
+            ...registration,
+            courses: getAvailableCoursesForRegistration(courses.data, registration)
           }
         })
+        .filter(registration => registration.courses.length > 0)
     }
   }
 
@@ -45,7 +43,7 @@ export default class CourseSuggestions extends Component {
       <div>
         {error
           ? <ErrorPage error={error} />
-          : <JSONView src={registrations}/>
+          : <CourseSuggestions query={query} registrations={registrations}/>
         }
       </div>
     )
