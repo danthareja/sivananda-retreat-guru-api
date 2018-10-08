@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import dynamic from 'next/dynamic'
-import { omit } from 'lodash';
 import { get } from '../api';
 
 import ErrorPage from './_error.js'

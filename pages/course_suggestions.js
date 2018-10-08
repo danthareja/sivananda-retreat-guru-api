@@ -1,23 +1,21 @@
 import React, { Component } from 'react'
 import dynamic from 'next/dynamic'
 import moment from 'moment';
-import { assign, flatten } from 'lodash';
-import ErrorPage from './_error.js'
+import { defaults, pick } from 'lodash';
 
 import { getCourses, getRegistrations, getRegistrationsWithoutCourse, getAvailableCoursesForRegistration } from '../api';
+import ErrorPage from './_error.js'
 
 const JSONView = dynamic(import('react-json-view'), {
   ssr: false
 });
 
-// Guests that don't have any registration for a course
-// if there is a course during their stay?
-export default class CourselessPage extends Component {
+export default class CourseSuggestions extends Component {
   static async getInitialProps(context) {
-    const query = assign({
+    const query = defaults(pick(context.query, ['min_stay', 'max_stay']), {
       min_stay: moment().format('YYYY-MM-DD'),
       max_stay: moment().add(7, 'days').format('YYYY-MM-DD')
-    }, context.query)
+    })
 
     const [registrations, courses] = await Promise.all([
       getRegistrations(query),
@@ -31,7 +29,6 @@ export default class CourselessPage extends Component {
 
     return {
       query,
-      error,
       registrations: getRegistrationsWithoutCourse(registrations.data)
         .map(registration => {
           return {

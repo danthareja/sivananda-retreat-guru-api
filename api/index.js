@@ -63,11 +63,16 @@ export async function getCourses({ min_stay, max_stay }) {
   })
 }
 
-export async function getRegistrations({ min_stay, max_stay }) {
+export async function getRegistrations({ program_id, min_stay, max_stay }) {
   return getAll('/registrations', {
-    min_stay: min_stay,
-    max_stay: max_stay,
+    program_id,
+    min_stay,
+    max_stay,
   })
+}
+
+export async function getPrograms({ id }) {
+  return get('/programs', { id })
 }
 
 export async function getAll(endpoint, params) {
