@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment';
-import { get, getAll, SPECIAL_GUEST_PROGRAM_ID } from '../api';
+import { get, getAll, SPEAKER_PROGRAM_ID } from '../api';
 import { assign } from 'lodash';
 
 import ErrorPage from './_error.js'
@@ -10,7 +10,7 @@ export default class ArrivalDeparturePage extends Component {
   static async getInitialProps(context) {
     // Assign default query parameters
     const query = assign({
-      program_id: SPECIAL_GUEST_PROGRAM_ID,
+      program_id: SPEAKER_PROGRAM_ID,
       min_stay: moment().format('YYYY-MM-DD'),
       max_stay: moment().add(7, 'days').format('YYYY-MM-DD')
     }, context.query)

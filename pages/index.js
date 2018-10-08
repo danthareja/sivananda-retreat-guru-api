@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function IndexPage (){
+export default function Index (){
   return (
     <div>
       <h1>README</h1>
@@ -28,7 +28,7 @@ export default function IndexPage (){
           <li><a href="/api/teachers">teachers</a></li>
           <li><a href="/api/transactions">transactions</a></li>
         </ul>
-        <p>It's up to the Retreat Guru API to define what <strong>parameters</strong> are allowed so refer to <a href="http://dev.sivanandabahamas.rbgapp.com/api">the documentation</a> to see a list of all <strong>resources</strong> and their <strong>parameters</strong></p>
+        <p>It's up to the Retreat Guru API to define what <strong>parameters</strong> are allowed so refer to <a href="https://sivanandabahamas.secure.retreat.guru/api">the documentation</a> to see a list of all <strong>resources</strong> and their <strong>parameters</strong></p>
       </section>
       <section>
         <h2>Reports</h2>

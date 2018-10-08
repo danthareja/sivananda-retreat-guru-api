@@ -1,4 +1,6 @@
+import { flatten, groupBy, pickBy, values } from 'lodash';
 import axios from 'axios';
+import moment from 'moment';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 
@@ -9,11 +11,71 @@ const api = axios.create({
   }
 });
 
-export const SPECIAL_GUEST_PROGRAM_ID = 5239;
+export const SPEAKER_PROGRAM_ID = 5239;
+export const YVP_PROGRAM_ID = 5237;
+
+// This is a list of all program categories available in Retreat Guru
+// and their appropriate identifiers to be used in queries
+// 
+// As of now, I am not aware of any automated way to generate this list,
+// so care should be taken to keep it updated, along with any references
+// in this codebase
+// 
+// Karma Yoga: ky
+// Experiential Course: course
+//   Professional Training: pt
+//   Sivananda Core Course: scc
+// Lodging Based
+//   Advanced Teacher Training Course: attc
+//   Children
+//   Speaker
+//   Teacher Training Course: ttc
+//   YVP: yvp-lodging
+// Yoga Vacation Program: yvp
+//   Special Event: special
+
+
+export function getRegistrationsWithoutCourse(registrations) {
+  return flatten(
+    values(
+      pickBy(
+        groupBy(registrations, 'full_name'),
+        registrations => registrations.length === 1 && registrations[0].program_id === YVP_PROGRAM_ID
+      )
+    )
+  )
+}
+
+export function getAvailableCoursesForRegistration(courses, registration) {
+  return courses.filter(course => {
+    return (
+      moment(registration.start_date).isSameOrBefore(course.start_date, 'day') &&
+      moment(registration.end_date).isSameOrAfter(course.end_date, 'day')
+    );
+  });
+}
+
+export async function getCourses({ min_stay, max_stay }) {
+  return getAll('/programs', {
+    category: 'course,yvp',
+    min_date: min_stay,
+    max_date: max_stay,
+  })
+}
+
+export async function getRegistrations({ min_stay, max_stay }) {
+  return getAll('/registrations', {
+    min_stay: min_stay,
+    max_stay: max_stay,
+  })
+}
+
+export async function getAll(endpoint, params) {
+  return get(endpoint, Object.assign({}, params, { limit: 0 }))
+}
 
 export async function get(endpoint, params) {
-  let data = null;
-  let error = null;
+  let data, error;
 
   try {
     const response = await api.get(endpoint, { params });
@@ -48,7 +110,3 @@ export async function get(endpoint, params) {
 
   return { data, error }
 };
-
-export async function getAll(endpoint, params) {
-  return get(endpoint, Object.assign({}, params, { limit: 0 }))
-}
