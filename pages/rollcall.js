@@ -1,14 +1,17 @@
 import React, { Component } from 'react'
-import { get, getAll } from '../api';
-import { omit, assign } from 'lodash';
+import { defaults, pick, omit } from 'lodash';
 
+import { getPrograms, getRegistrations } from '../api';
 import ErrorPage from './_error.js'
 import Rollcall from '../components/Rollcall.js'
 
 export default class RollcallPage extends Component {
   static async getInitialProps(context) {
-    // Check required parameters
-    if (!context.query.program_id) {
+    const query = defaults(pick(context.query, ['program_id', 'blank_columns']), {
+      blank_columns: 6
+    })
+
+    if (!query.program_id) {
       return {
         error: {
           ourMessage: 'Expected parameter "program_id" (e.g. /rollcall?program_id=5239)',
@@ -18,20 +21,11 @@ export default class RollcallPage extends Component {
       }
     }
 
-    // Assign default query parameters
-    const query = assign({
-      blank_columns: 6,
-    }, context.query)
-
-    // Query Retreat Guru
     const [programs, registrations] = await Promise.all([
-      get('/programs', { id: query.program_id }),
-      getAll('/registrations', {
-        program_id: query.program_id
-      }),
+      getPrograms({ id: query.program_id }),
+      getRegistrations(omit(query, ['blank_columns']))
     ]);
 
-    // Validate responses
     const error = programs.error || registrations.error
     if (error) {
       return { error }

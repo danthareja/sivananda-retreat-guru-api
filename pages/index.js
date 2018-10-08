@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function IndexPage (){
+export default function Index (){
   return (
     <div>
       <h1>README</h1>
@@ -28,7 +28,7 @@ export default function IndexPage (){
           <li><a href="/api/teachers">teachers</a></li>
           <li><a href="/api/transactions">transactions</a></li>
         </ul>
-        <p>It's up to the Retreat Guru API to define what <strong>parameters</strong> are allowed so refer to <a href="http://dev.sivanandabahamas.rbgapp.com/api">the documentation</a> to see a list of all <strong>resources</strong> and their <strong>parameters</strong></p>
+        <p>It's up to the Retreat Guru API to define what <strong>parameters</strong> are allowed so refer to <a href="https://sivanandabahamas.secure.retreat.guru/api">the documentation</a> to see a list of all <strong>resources</strong> and their <strong>parameters</strong></p>
       </section>
       <section>
         <h2>Reports</h2>
@@ -51,6 +51,15 @@ export default function IndexPage (){
           <p>This is customizeable by adding the <i>blank_columns</i> <strong>parameter</strong></p>
           <p>For example, to generate a report for <strong>program 3524</strong> with <strong>3 blank columns</strong>, use the following url</p>
           <p><a href="/rollcall?program_id=3524&blank_columns=3">/rollcall?program_id=3524&blank_columns=3</a></p>
+        </div>
+        <div>
+          <h3>Course Suggestions</h3>
+          <p>A course suggestions report is available at <a href="/course_suggestions">/course_suggestions</a></p>
+          <p>This report shows a list of all guests that are not yet registered for a course, and the coureses that fit within the duration of their stay.</p>
+          <p>By default, it queries the <strong>registrations</strong> resource for all entries between today and seven days from now</p>
+          <p>This is customizeable by adding the <i>min_stay</i> and <i>max_stay</i> <strong>parameters</strong>.</p>
+          <p>For example, to generate a report for registrations between <strong>2018-08-28</strong> and <strong>2018-09-09</strong>, use the following url</p>
+          <p><a href="/course_suggestions?min_stay=2018-08-28&max_stay=2018-09-09">/course_suggestions?min_stay=2018-08-28&max_stay=2018-09-09</a></p>
         </div>
       </section>
     </div>
