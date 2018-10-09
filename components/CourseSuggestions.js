@@ -15,8 +15,9 @@ export default class CourseSuggestions extends Component {
   getColumns() {
     return [
       {
+        id: "name",
         Header: "Name",
-        accessor: "full_name",
+        accessor: d => <a href={d.admin_link}>{d.full_name}</a>,
         maxWidth: 200
       },
       {
@@ -83,7 +84,7 @@ function CoursesCell({ row }) {
   return (
     <ul>
       {row.courses.map(course => (
-        <li>
+        <li key={course.id}>
           <a target="_blank" href={course.program_link}>
             {course.name}
           </a>

@@ -27,8 +27,8 @@ export const YVP_PROGRAM_ID = 5237;
 //   Sivananda Core Course: scc
 // Lodging Based
 //   Advanced Teacher Training Course: attc
-//   Children
-//   Speaker
+//   Children: children
+//   Speaker: speaker
 //   Teacher Training Course: ttc
 //   YVP: yvp-lodging
 // Yoga Vacation Program: yvp
@@ -60,7 +60,7 @@ export function getAvailableCoursesForRegistration(courses, registration) {
 
 export async function getCourses({ min_stay, max_stay }) {
   return getAll("/programs", {
-    category: "course,yvp",
+    category: "course,pt,scc,attc,ttc",
     min_date: min_stay,
     max_date: max_stay
   });
