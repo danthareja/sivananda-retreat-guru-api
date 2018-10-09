@@ -53,10 +53,12 @@ export function getRegistrationsWithoutCourse(registrations) {
 export function getAvailableCoursesForRegistration(courses, registration) {
   return courses.filter(course => {
     return (
+      course.public &&
       moment(registration.start_date).isSameOrBefore(
         course.start_date,
         "day"
-      ) && moment(registration.end_date).isSameOrAfter(course.end_date, "day")
+      ) &&
+      moment(registration.end_date).isSameOrAfter(course.end_date, "day")
     );
   });
 }
