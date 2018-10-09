@@ -17,7 +17,7 @@ export default class CourseSuggestionsPage extends Component {
     const query = defaults(pick(context.query, ["min_stay", "max_stay"]), {
       min_stay: moment().format("YYYY-MM-DD"),
       max_stay: moment()
-        .add(7, "days")
+        .add(1, "months")
         .format("YYYY-MM-DD")
     });
 
