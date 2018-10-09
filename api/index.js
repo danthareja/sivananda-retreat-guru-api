@@ -41,12 +41,10 @@ export function getRegistrationsWithoutCourse(registrations) {
         groupBy(registrations, "full_name"),
         registrations =>
           registrations.length === 1 &&
-          registrations[0].program_id ===
-            YVP_PROGRAM_ID(
-              // "reserved" "pending" "need-approval" "unconfirmed" "cancelled" "arrived" "checked-out" "duplicate"
-              registrations[0].status === "arrived" ||
-                registrations[0].status === "reserved"
-            )
+          registrations[0].program_id === YVP_PROGRAM_ID &&
+          // "reserved" "pending" "need-approval" "unconfirmed" "cancelled" "arrived" "checked-out" "duplicate"
+          (registrations[0].status === "arrived" ||
+            registrations[0].status === "reserved")
       )
     )
   );
