@@ -40,9 +40,11 @@ export function getRegistrationsWithoutCourse(registrations) {
       pickBy(
         groupBy(registrations, "full_name"),
         registrations =>
+          // There is only one registrations for this guest
           registrations.length === 1 &&
+          // That registration is for the YVP program
           registrations[0].program_id === YVP_PROGRAM_ID &&
-          // "reserved" "pending" "need-approval" "unconfirmed" "cancelled" "arrived" "checked-out" "duplicate"
+          // That registration is arrived or reserved
           (registrations[0].status === "arrived" ||
             registrations[0].status === "reserved")
       )
@@ -53,11 +55,9 @@ export function getRegistrationsWithoutCourse(registrations) {
 export function getAvailableCoursesForRegistration(courses, registration) {
   return courses.filter(course => {
     return (
-      course.public &&
-      moment(registration.start_date).isSameOrBefore(
-        course.start_date,
-        "day"
-      ) &&
+      // Arrive at least one day before course start
+      moment(registration.start_date).isBefore(course.start_date, "day") &&
+      // Depart at least on course end
       moment(registration.end_date).isSameOrAfter(course.end_date, "day")
     );
   });

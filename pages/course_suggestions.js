@@ -38,7 +38,7 @@ export default class CourseSuggestionsPage extends Component {
           return {
             ...registration,
             courses: getAvailableCoursesForRegistration(
-              courses.data,
+              courses.data.filter(c => c.public),
               registration
             )
           };
